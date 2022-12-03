@@ -33,6 +33,15 @@ fn part1(input: &Vec<Elf>) -> i32 {
     input.iter().map(|e| e.0.iter().sum()).max().unwrap()
 }
 
+#[aoc(day1, part2)]
+fn part2(input: &Vec<Elf>) -> i32 {
+    let mut calories: Vec<i32> = input.iter().map(|e| e.0.iter().sum()).collect();
+    calories.sort();
+    calories.reverse();
+
+    calories[..=2].iter().sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -55,5 +64,11 @@ mod tests {
     fn test_part1() {
         let parsed_input = input_generator(INPUT);
         assert_eq!(24000, part1(&parsed_input))
+    }
+
+    #[test]
+    fn test_part2() {
+        let parsed_input = input_generator(INPUT);
+        assert_eq!(45000, part2(&parsed_input))
     }
 }
