@@ -43,12 +43,12 @@ impl Round {
         match (&self.opponent, &self.mine) {
             (Shape::Rock, Shape::Rock) => 1 + 3,
             (Shape::Rock, Shape::Paper) => 2 + 6,
-            (Shape::Rock, Shape::Scissors) => 3 + 0,
-            (Shape::Paper, Shape::Rock) => 1 + 0,
+            (Shape::Rock, Shape::Scissors) => 3,
+            (Shape::Paper, Shape::Rock) => 1,
             (Shape::Paper, Shape::Paper) => 2 + 3,
             (Shape::Paper, Shape::Scissors) => 3 + 6,
             (Shape::Scissors, Shape::Rock) => 1 + 6,
-            (Shape::Scissors, Shape::Paper) => 2 + 0,
+            (Shape::Scissors, Shape::Paper) => 2,
             (Shape::Scissors, Shape::Scissors) => 3 + 3,
         }
     }

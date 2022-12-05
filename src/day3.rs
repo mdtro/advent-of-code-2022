@@ -28,11 +28,10 @@ struct Rucksack {
 
 impl Rucksack {
     fn find_duplicate_item(&self) -> char {
-        self.first
+        *self.first
             .intersection(&self.second)
             .next()
             .unwrap()
-            .clone()
     }
 }
 
@@ -86,8 +85,8 @@ fn part2(input: &Vec<Rucksack>) -> i32 {
         let first_intersection: HashSet<_> = r1.intersection(&r2).collect();
 
         for c in first_intersection {
-            if r3.contains(&c) {
-                sum += priorities.get(&c).unwrap();
+            if r3.contains(c) {
+                sum += priorities.get(c).unwrap();
             }
         }
     }

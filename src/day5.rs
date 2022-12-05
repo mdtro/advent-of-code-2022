@@ -69,7 +69,7 @@ fn build_container_map(s: &str) -> BTreeMap<usize, VecDeque<Container>> {
             let container_string: String = container_chars.iter().collect();
 
             // no container at this level, keep going
-            if container_string.trim().len() == 0 {
+            if container_string.trim().is_empty() {
                 continue;
             } else {
                 let container = Container::from_str(&container_string).unwrap();
@@ -93,7 +93,7 @@ fn build_instruction_list(s: &str) -> Vec<Instruction> {
 fn input_generator(input: &str) -> (BTreeMap<usize, VecDeque<Container>>, Vec<Instruction>) {
     let (container_diagram, raw_instructions) = input.split_once("\n\n").unwrap();
 
-    let container_map = build_container_map(&container_diagram);
+    let container_map = build_container_map(container_diagram);
     let instructions = build_instruction_list(raw_instructions);
 
     (container_map, instructions)
@@ -130,7 +130,7 @@ fn part1(input: &(BTreeMap<usize, VecDeque<Container>>, Vec<Instruction>)) -> St
     let top_containers: String = map_and_instructions
         .0
         .iter()
-        .filter_map(|(_, stack)| stack.front().clone())
+        .filter_map(|(_, stack)| stack.front())
         .map(|c: &Container| c.0.to_string())
         .collect();
 
@@ -176,7 +176,7 @@ fn part2(input: &(BTreeMap<usize, VecDeque<Container>>, Vec<Instruction>)) -> St
     let top_containers: String = map_and_instructions
         .0
         .iter()
-        .filter_map(|(_, stack)| stack.front().clone())
+        .filter_map(|(_, stack)| stack.front())
         .map(|c: &Container| c.0.to_string())
         .collect();
 

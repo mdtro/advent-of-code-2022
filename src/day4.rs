@@ -71,7 +71,7 @@ impl Pair {
 
         let intersection: HashSet<_> = first_range.intersection(&second_range).collect();
 
-        intersection.len() >= 1
+        !intersection.is_empty()
     }
 }
 
