@@ -81,12 +81,12 @@ fn input_generator(input: &str) -> Vec<Pair> {
 }
 
 #[aoc(day4, part1)]
-fn part1(input: &Vec<Pair>) -> usize {
+fn part1(input: &[Pair]) -> usize {
     input.iter().filter(|p| p.fully_contains_exists()).count()
 }
 
 #[aoc(day4, part2)]
-fn part2(input: &Vec<Pair>) -> usize {
+fn part2(input: &[Pair]) -> usize {
     input.iter().filter(|p| p.has_overlap()).count()
 }
 

@@ -29,12 +29,12 @@ fn input_generator(input: &str) -> Vec<Elf> {
 }
 
 #[aoc(day1, part1)]
-fn part1(input: &Vec<Elf>) -> i32 {
+fn part1(input: &[Elf]) -> i32 {
     input.iter().map(|e| e.0.iter().sum()).max().unwrap()
 }
 
 #[aoc(day1, part2)]
-fn part2(input: &Vec<Elf>) -> i32 {
+fn part2(input: &[Elf]) -> i32 {
     let mut calories: Vec<i32> = input.iter().map(|e| e.0.iter().sum()).collect();
     calories.sort();
     calories.reverse();

@@ -128,12 +128,12 @@ fn input_generator(input: &str) -> Vec<Round> {
 // outcome -- lost: 0, draw: 3, won: 6
 
 #[aoc(day2, part1)]
-fn part1(input: &Vec<Round>) -> i32 {
+fn part1(input: &[Round]) -> i32 {
     input.iter().map(|r| r.score()).sum()
 }
 
 #[aoc(day2, part2)]
-fn part2(input: &Vec<Round>) -> i32 {
+fn part2(input: &[Round]) -> i32 {
     input
         .iter()
         .map(|r| {

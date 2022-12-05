@@ -28,10 +28,7 @@ struct Rucksack {
 
 impl Rucksack {
     fn find_duplicate_item(&self) -> char {
-        *self.first
-            .intersection(&self.second)
-            .next()
-            .unwrap()
+        *self.first.intersection(&self.second).next().unwrap()
     }
 }
 
@@ -60,7 +57,7 @@ fn input_generator(input: &str) -> Vec<Rucksack> {
 }
 
 #[aoc(day3, part1)]
-fn part1(input: &Vec<Rucksack>) -> i32 {
+fn part1(input: &[Rucksack]) -> i32 {
     let priorities = priority_map();
     input
         .iter()
@@ -72,7 +69,7 @@ fn part1(input: &Vec<Rucksack>) -> i32 {
 }
 
 #[aoc(day3, part2)]
-fn part2(input: &Vec<Rucksack>) -> i32 {
+fn part2(input: &[Rucksack]) -> i32 {
     let priorities = priority_map();
 
     let mut sum = 0;
