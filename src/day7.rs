@@ -8,10 +8,10 @@ enum Line {
 
 impl From<&str> for Line {
     fn from(s: &str) -> Self {
-        if s.starts_with("$") {
-            return Line::CommandInput(Command::from_str(s).unwrap());
+        if s.starts_with('$') {
+            Line::CommandInput(Command::from_str(s).unwrap())
         } else {
-            return Line::CommandOutput(FileSystemObject::from_str(s).unwrap());
+            Line::CommandOutput(FileSystemObject::from_str(s).unwrap())
         }
     }
 }
@@ -61,23 +61,23 @@ impl FromStr for FileSystemObject {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("dir") {
-            let (_, directory_name) = s.split_once(" ").unwrap();
-            return Ok(FileSystemObject {
+            let (_, directory_name) = s.split_once(' ').unwrap();
+            Ok(FileSystemObject {
                 name: directory_name.to_string(),
                 _type: FileSystemObjectType::Directory,
                 parent: None,
                 size: 0,
                 children: vec![],
-            });
+            })
         } else {
-            let (file_size, file_name) = s.split_once(" ").unwrap();
-            return Ok(FileSystemObject {
+            let (file_size, file_name) = s.split_once(' ').unwrap();
+            Ok(FileSystemObject {
                 name: file_name.to_string(),
                 _type: FileSystemObjectType::File,
                 parent: None,
                 size: file_size.parse::<i32>().unwrap(),
                 children: vec![],
-            });
+            })
         }
     }
 }
@@ -96,7 +96,7 @@ struct FileSystem {
 fn build_filesystem(lines: &[Line]) -> FileSystem {
     let mut nodes: Vec<FileSystemObject> = vec![];
 
-    let mut line_iterator = lines.into_iter();
+    let mut line_iterator = lines.iter();
 
     // an overly complex way to just start with `$ cd /`
     let _current_directory = {
@@ -124,7 +124,7 @@ fn build_filesystem(lines: &[Line]) -> FileSystem {
     let mut previous_directories: Vec<NodeId> = vec![];
     previous_directories.push(NodeId { index: 0 });
 
-    while let Some(line) = line_iterator.next() {
+    for line in line_iterator {
         let next_index = nodes.len();
         match line {
             Line::CommandInput(command) => match command {
@@ -145,7 +145,7 @@ fn build_filesystem(lines: &[Line]) -> FileSystem {
                         // current_directory = new_dir.clone();
 
                         // remember our previous directories, for when `cd ..` is called an arbitrary amount of times.... r.i.p.
-                        previous_directories.push(current_directory_node_id.clone());
+                        previous_directories.push(current_directory_node_id);
 
                         current_directory_node_id = NodeId { index: next_index };
 
@@ -169,10 +169,10 @@ fn build_filesystem(lines: &[Line]) -> FileSystem {
                     .push(next_index.into());
 
                 // update the size of all parents
-                let mut parent_node = Some(current_directory_node_id.clone());
+                let mut parent_node = Some(current_directory_node_id);
                 while let Some(pn) = parent_node {
                     nodes[pn.index].size += object.size;
-                    parent_node = nodes[pn.index].parent.clone();
+                    parent_node = nodes[pn.index].parent;
                 }
 
                 // set the current object's parent as the current directory
