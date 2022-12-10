@@ -56,6 +56,7 @@ struct FileSystemObject {
     children: Vec<NodeId>,
 }
 
+
 impl FromStr for FileSystemObject {
     type Err = String;
 
