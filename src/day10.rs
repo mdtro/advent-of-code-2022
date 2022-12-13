@@ -19,6 +19,15 @@ impl FromStr for Instruction {
     }
 }
 
+impl Instruction {
+    fn get_num_of_cycles(&self) -> i32 {
+        match self {
+            Instruction::ADDX(_) => 2,
+            Instruction::NOOP => 1,
+        }
+    }
+}
+
 #[derive(Debug)]
 struct Cpu {
     register: i32,
@@ -47,14 +56,6 @@ impl Cpu {
         match instruction {
             Instruction::ADDX(value) => {
                 for c in 0..2 {
-                    let pixel = (self.cycle + c) % 40;
-
-                    if ((self.register - 1)..=(self.register + 1)).contains(&pixel) {
-                        self.crt.push_str("#");
-                    } else {
-                        self.crt.push_str(" "); // changed this to a space because I couldn't read it
-                    }
-
                     self.cycle += 1;
                     self.update_signal_strength();
 
@@ -65,18 +66,8 @@ impl Cpu {
                 }
             }
             Instruction::NOOP => {
-                for c in 0..1 {
-                    let pixel = (self.cycle + c) % 40;
-
-                    if ((self.register - 1)..=(self.register + 1)).contains(&pixel) {
-                        self.crt.push_str("#");
-                    } else {
-                        self.crt.push_str(" "); // changed this to a space because I couldn't read it
-                    }
-
-                    self.cycle += 1;
-                    self.update_signal_strength();
-                }
+                self.cycle += 1;
+                self.update_signal_strength();
             }
         }
     }
@@ -86,6 +77,25 @@ impl Cpu {
         if cycles.contains(&self.cycle) {
             let current_signal_strength = self.signal_strength();
             self.signal_strengths.push(current_signal_strength)
+        }
+    }
+
+    fn build_screen(&mut self, instructions: &[Instruction]) {
+        for instruction in instructions {
+            for c in 0..instruction.get_num_of_cycles() {
+                let relative_pixel = (self.cycle + c) % 40;
+                if ((self.register - 1)..=(self.register + 1)).contains(&relative_pixel) {
+                    self.crt.push('#');
+                } else {
+                    self.crt.push(' '); //using a space here since I can't read with the dots
+                }
+            }
+
+            self.cycle += instruction.get_num_of_cycles();
+            match instruction {
+                Instruction::ADDX(value) => self.register += value,
+                Instruction::NOOP => {}
+            }
         }
     }
 
@@ -124,14 +134,10 @@ fn part1(instructions: &[Instruction]) -> i32 {
 #[aoc(day10, part2)]
 fn part2(instructions: &[Instruction]) -> String {
     let mut cpu = Cpu::default();
-
-    for i in instructions {
-        cpu.process_instruction(i);
-    }
+    cpu.build_screen(instructions);
 
     let screen = cpu.print_screen();
-    println!("{}", &screen);
-    screen
+    format!("\n{}", screen)
 }
 
 mod tests {
@@ -289,7 +295,8 @@ noop";
         assert_eq!(13140, part1(&parsed_input))
     }
 
-    const PART2_OUTPUT: &str = "##  ##  ##  ##  ##  ##  ##  ##  ##  ##  
+    const PART2_OUTPUT: &str = "
+##  ##  ##  ##  ##  ##  ##  ##  ##  ##  
 ###   ###   ###   ###   ###   ###   ### 
 ####    ####    ####    ####    ####    
 #####     #####     #####     #####     
