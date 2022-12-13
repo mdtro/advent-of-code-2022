@@ -2,8 +2,8 @@ use std::str::FromStr;
 
 #[derive(Debug)]
 enum Instruction {
-    ADDX(i32),
-    NOOP,
+    Addx(i32),
+    Noop,
 }
 
 impl FromStr for Instruction {
@@ -12,9 +12,9 @@ impl FromStr for Instruction {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("addx") {
             let (_, amount) = s.split_once(' ').unwrap();
-            Ok(Self::ADDX(amount.parse::<i32>().unwrap()))
+            Ok(Self::Addx(amount.parse::<i32>().unwrap()))
         } else {
-            Ok(Self::NOOP)
+            Ok(Self::Noop)
         }
     }
 }
@@ -22,8 +22,8 @@ impl FromStr for Instruction {
 impl Instruction {
     fn get_num_of_cycles(&self) -> i32 {
         match self {
-            Instruction::ADDX(_) => 2,
-            Instruction::NOOP => 1,
+            Instruction::Addx(_) => 2,
+            Instruction::Noop => 1,
         }
     }
 }
@@ -54,7 +54,7 @@ impl Cpu {
 
     fn process_instruction(&mut self, instruction: &Instruction) {
         match instruction {
-            Instruction::ADDX(value) => {
+            Instruction::Addx(value) => {
                 for c in 0..2 {
                     self.cycle += 1;
                     self.update_signal_strength();
@@ -65,7 +65,7 @@ impl Cpu {
                     }
                 }
             }
-            Instruction::NOOP => {
+            Instruction::Noop => {
                 self.cycle += 1;
                 self.update_signal_strength();
             }
@@ -93,8 +93,8 @@ impl Cpu {
 
             self.cycle += instruction.get_num_of_cycles();
             match instruction {
-                Instruction::ADDX(value) => self.register += value,
-                Instruction::NOOP => {}
+                Instruction::Addx(value) => self.register += value,
+                Instruction::Noop => {}
             }
         }
     }
