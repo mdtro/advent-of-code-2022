@@ -12,9 +12,9 @@ impl FromStr for Instruction {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("addx") {
             let (_, amount) = s.split_once(' ').unwrap();
-            return Ok(Self::ADDX(amount.parse::<i32>().unwrap()));
+            Ok(Self::ADDX(amount.parse::<i32>().unwrap()))
         } else {
-            return Ok(Self::NOOP);
+            Ok(Self::NOOP)
         }
     }
 }

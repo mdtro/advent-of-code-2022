@@ -144,7 +144,7 @@ fn part2(map: &Map) -> usize {
         .trees
         .iter()
         .enumerate()
-        .map(|(index, tree)| map.is_visible(index).1)
+        .map(|(index, _tree)| map.is_visible(index).1)
         .collect();
 
     *scores.iter().max().unwrap()

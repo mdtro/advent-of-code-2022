@@ -49,7 +49,7 @@ impl From<usize> for NodeId {
 
 #[derive(Debug, Clone)]
 struct FileSystemObject {
-    name: String,
+    _name: String,
     _type: FileSystemObjectType,
     parent: Option<NodeId>,
     size: i32,
@@ -63,7 +63,7 @@ impl FromStr for FileSystemObject {
         if s.starts_with("dir") {
             let (_, directory_name) = s.split_once(' ').unwrap();
             Ok(FileSystemObject {
-                name: directory_name.to_string(),
+                _name: directory_name.to_string(),
                 _type: FileSystemObjectType::Directory,
                 parent: None,
                 size: 0,
@@ -72,7 +72,7 @@ impl FromStr for FileSystemObject {
         } else {
             let (file_size, file_name) = s.split_once(' ').unwrap();
             Ok(FileSystemObject {
-                name: file_name.to_string(),
+                _name: file_name.to_string(),
                 _type: FileSystemObjectType::File,
                 parent: None,
                 size: file_size.parse::<i32>().unwrap(),
@@ -105,7 +105,7 @@ fn build_filesystem(lines: &[Line]) -> FileSystem {
             Line::CommandInput(command) => match command {
                 Command::ChangeDirectory(dir) => {
                     let root = FileSystemObject {
-                        name: dir.to_string(),
+                        _name: dir.to_string(),
                         _type: FileSystemObjectType::Directory,
                         parent: None,
                         size: 0,
@@ -134,7 +134,7 @@ fn build_filesystem(lines: &[Line]) -> FileSystem {
                             previous_directories.pop().unwrap_or(NodeId { index: 0 })
                     } else {
                         let new_dir = FileSystemObject {
-                            name: dir.to_string(),
+                            _name: dir.to_string(),
                             _type: FileSystemObjectType::Directory,
                             parent: Some(current_directory_node_id),
                             size: 0,
